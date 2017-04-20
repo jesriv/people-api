@@ -20,6 +20,11 @@ module DataManager
 		File.read(@@data_file)
 	end
 
+	def save
+		values = instance_variables.map { |v| instance_variable_get(v) }
+		write_data(values.join(","))
+	end
+
 	private
 
 	#

@@ -1,10 +1,12 @@
 require 'data_manager'
 
 RSpec.describe "Data Manager" do
-
   # Create a dummy class to emulate extending the module
   before(:each) do
     @class = Class.new { extend DataManager }
+    @class.instance_variable_set("@firstname", "Ted Talker")
+    @class.instance_variable_set("@address", "123 Maple Ave")
+
     @data_file = "db/#{@class.class.name.downcase}.txt"
   end
 
@@ -33,6 +35,12 @@ RSpec.describe "Data Manager" do
     @class.write_data("some data")
     contents = @class.read_data
     expect(contents).to include("some data")
+  end
+
+  it "should save attributes" do
+    @class.save
+    contents = File.read(@data_file)
+    expect(contents).to include("Ted Talker,123 Maple Ave")
   end
 
   after(:each) do
