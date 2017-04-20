@@ -13,7 +13,11 @@ module DataManager
 	end
 
 	def write_data(contents)
-		File.open(@@data_file, 'a') { |f| f.puts contents }
+		File.open(@@data_file, 'a') { |f| f << "#{contents}\n" }
+	end
+
+	def read_data
+		File.read(@@data_file)
 	end
 
 	private

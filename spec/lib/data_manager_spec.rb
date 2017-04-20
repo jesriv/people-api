@@ -18,13 +18,22 @@ RSpec.describe "Data Manager" do
 
   it "should write data to a file" do
     @class.write_data("user data")
-    contents = File.open(@data_file) { |f| f.readline }
+    contents = File.read(@data_file)
     expect(contents).to include("user data")
   end
 
-  pending "should append to existing data"
+  it "should append to existing data" do
+    @class.write_data("user line 1")
+    @class.write_data("user line 2")
+    contents = File.read(@data_file)
+    expect(contents).to include("user line 1\nuser line 2\n")
+  end
 
-  pending "should read data from a file"
+  it "should read data from a file" do
+    @class.write_data("some data")
+    contents = @class.read_data
+    expect(contents).to include("some data")
+  end
 
   after(:each) do
     File.delete(@data_file)
