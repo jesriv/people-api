@@ -24,8 +24,6 @@ RSpec.describe "Data Manager" do
   context "file management" do
     before(:each) do
       @class = IncludeClass.new
-
-
       @data_file = "db/#{@class.class.name.downcase}.txt"
     end
 
@@ -62,13 +60,6 @@ RSpec.describe "Data Manager" do
       @class.save
       contents = File.read(@data_file)
       expect(contents).to eq("Ted,123 Maple Ave\n")
-    end
-
-    #
-    # Delete everything inside the file after each test
-    #
-    after(:each) do
-      File.open(@data_file, 'w') { |f| f.truncate(0) }
     end
 
     #
