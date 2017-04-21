@@ -1,5 +1,6 @@
 class Person
   extend Parser
+  include DataManager
 
   attr_accessor :last_name, :first_name, :favorite_color, :date_of_birth
 

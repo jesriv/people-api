@@ -1,48 +1,57 @@
 module DataManager
 
+  #
   # Directory where data will get stored
+  #
   DATA_DIR = "db"
 
   #
-  # On extension of the module
+  # On initialize
   # check for existance of data directory and data file
   # and create if they do not exist
   #
-  def self.extended(obj)
-    @@data_file = "#{DATA_DIR}/#{obj.class.name.downcase}.txt"
+  def initialize
+    @data_file = "#{DATA_DIR}/#{self.class.name.downcase}.txt"
 
     make_data_dir
-    make_data_file
+    make_data_file(@data_file)
   end
 
   def write_data(contents)
-    File.open(@@data_file, 'a') { |f| f << "#{contents}\n" }
+    File.open(@data_file, 'a') { |f| f << "#{contents}\n" }
   end
 
   def read_data
-    File.read(@@data_file)
+    File.read(@data_file)
   end
 
   def save
-    values = instance_variables.map { |v| instance_variable_get(v) }
+    values = filtered_variables.map { |v| instance_variable_get(v) }
     write_data(values.join(","))
   end
 
+  
   private
-
   #
   # Check if the data directory exists
   # if not create one
   #
-  def self.make_data_dir
+  def make_data_dir
     Dir.mkdir(DATA_DIR) unless File.directory?(DATA_DIR)
   end
 
   #
   # Check if the data file exists
-  # if not create one named after the class that extended the module
+  # if not create one named after the class that included the module
   # 
-  def self.make_data_file
-    File.new(@@data_file, 'w') unless File.file?(@@data_file)
+  def make_data_file(file)
+    File.new(file, 'w') unless File.file?(file)
+  end
+
+  #
+  # Filter out the variables that shouldn't get saved to the data file
+  # 
+  def filtered_variables
+    instance_variables.select { |v| instance_variable_get(v) != @data_file }
   end
 end
