@@ -30,7 +30,6 @@ module DataManager
     write_data(values.join(","))
   end
 
-  
   private
   #
   # Check if the data directory exists

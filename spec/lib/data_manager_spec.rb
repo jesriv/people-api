@@ -7,14 +7,14 @@ RSpec.describe "Data Manager" do
   #
   class IncludeClass; include DataManager end
 
+  before(:context) do
+    @class = IncludeClass.new
+    @data_file = "db/#{@class.class.name.downcase}.txt"
+  end
   
   context "included" do
-    before(:context) do
-      @class_instance = IncludeClass.new
-    end
-
     it "should respond to write_data" do
-      expect(@class_instance).to respond_to(:write_data)
+      expect(@class).to respond_to(:write_data)
     end
   end
 
@@ -22,11 +22,6 @@ RSpec.describe "Data Manager" do
   # Tests for reading and writing to a data file
   #
   context "file management" do
-    before(:each) do
-      @class = IncludeClass.new
-      @data_file = "db/#{@class.class.name.downcase}.txt"
-    end
-
     it "should have a data directory" do
       expect(File.directory?("db")).to eq(true)
     end
@@ -61,12 +56,18 @@ RSpec.describe "Data Manager" do
       contents = File.read(@data_file)
       expect(contents).to eq("Ted,123 Maple Ave\n")
     end
+  end
 
-    #
-    # Delete the data file after all tests in context
-    #
-    after(:each) do
-      File.delete(@data_file) if @data_file
-    end
+  #
+  # Delete everything inside the file after each test
+  #
+  after(:each) do
+    File.open(@data_file, 'w') { |f| f.truncate(0) }
+  end
+  #
+  # Delete the data file after all tests in context
+  #
+  after(:context) do
+    File.delete(@data_file) if @data_file
   end
 end
