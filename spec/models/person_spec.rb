@@ -40,8 +40,8 @@ RSpec.describe "Person" do
       expect(@person.favorite_color).to eq("Blue")
     end
 
-    it "should match date of birth attribute to string input" do
-      expect(@person.date_of_birth).to eq("1-15-1990")
+    it "should match date of birth to formatted date of birth" do
+      expect(@person.date_of_birth).to eq(Date.strptime("1-15-1990", '%m-%d-%Y'))
     end
   end
 end

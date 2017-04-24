@@ -18,6 +18,6 @@ class Person
 
   def self.bind_row(string)
     fields = self.split_input(string)
-    Person.new(last_name: fields[0], first_name: fields[1], favorite_color: fields[2], date_of_birth: fields[3]) if fields
+    Person.new(last_name: fields[0], first_name: fields[1], favorite_color: fields[2], date_of_birth: Date.strptime(fields[3], '%m-%d-%Y')) if fields
   end
 end

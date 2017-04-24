@@ -12,7 +12,7 @@ RSpec.describe 'The people API', type: :request do
       post '/records', { record: "Smith, Joe, Purple, 12-19-2000" }
       expect(last_response.content_type).to eq("application/json")
       expect(last_response.body).to eq({status: "success", record: [
-          "Smith", "Joe", "Purple", "12-19-2000"
+          "Smith", "Joe", "Purple", "2000-12-19"
         ]}.to_json
       )
     end
@@ -38,8 +38,8 @@ RSpec.describe 'The people API', type: :request do
       get '/records/birthdate'
       expect(last_response.content_type).to eq("application/json")
       expect(last_response.body).to eq({records: [
-          ["Smith", "John", "Green","1-20-1990"],
-          ["Smith", "Fred", "Red", "2-5-1980"]
+          ["Smith", "Fred", "Red", "1980-02-05"],
+          ["Smith", "John", "Green","1990-01-20"]
         ]}.to_json
       )
     end
@@ -53,8 +53,8 @@ RSpec.describe 'The people API', type: :request do
       get '/records/name'
       expect(last_response.content_type).to eq("application/json")
       expect(last_response.body).to eq({records: [
-          ["Smith", "Fred", "Red", "2-5-1980"],
-          ["Allen", "John", "Green","1-20-1990"]
+          ["Smith", "Fred", "Red", "1980-02-05"],
+          ["Allen", "John", "Green","1990-01-20"]
         ]}.to_json
       )
     end
