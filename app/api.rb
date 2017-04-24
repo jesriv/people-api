@@ -36,5 +36,11 @@ class API < Grape::API
       results = Person.order_by_column(Person.read_data, 0, 'DESC')
       { records: results }
     end
+
+    desc 'Get records sorted by color and last name'
+    get :color do
+      results = Person.order_by_columns(Person.read_data, 2, 0)
+      { records: results }
+    end
   end
 end

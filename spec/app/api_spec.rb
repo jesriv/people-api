@@ -71,6 +71,25 @@ RSpec.describe 'The people API', type: :request do
     end
   end
 
+  context "GET /records/color request" do
+    it "should return records descending by color then ascending by last name" do
+      post '/records', { record: "Allen, John, Green, 1-20-1990" }
+      post '/records', { record: "Smith, Fred, Red, 2-5-1980" }
+      post '/records', { record: "Johnson, Mike, Red, 1-20-1990" }
+      post '/records', { record: "Williams, Jay, Red, 2-5-1980" }
+
+      get '/records/color'
+      expect(last_response.content_type).to eq("application/json")
+      expect(last_response.body).to eq({records: [
+          ["Johnson", "Mike", "Red", "1990-01-20"],
+          ["Smith", "Fred", "Red", "1980-02-05"],
+          ["Williams", "Jay", "Red", "1980-02-05"],
+          ["Allen", "John", "Green","1990-01-20"],
+        ]}.to_json
+      )
+    end
+  end
+
   #
   # Delete everything inside the file after each test
   #
