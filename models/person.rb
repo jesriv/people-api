@@ -1,5 +1,10 @@
+require './lib/parser'
+require './lib/sorter'
+require './lib/data_manager'
+
 class Person
   extend Parser
+  extend Sorter
   include DataManager
 
   attr_accessor :last_name, :first_name, :favorite_color, :date_of_birth
@@ -13,6 +18,6 @@ class Person
 
   def self.bind_row(string)
     fields = self.split_input(string)
-    Person.new(last_name: fields[0], first_name: fields[1], favorite_color: fields[2], date_of_birth: fields[3])
+    Person.new(last_name: fields[0], first_name: fields[1], favorite_color: fields[2], date_of_birth: fields[3]) if fields
   end
 end

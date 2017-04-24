@@ -6,51 +6,41 @@ module DataManager
   DATA_DIR = "db"
 
   #
-  # On initialize
-  # check for existance of data directory and data file
-  # and create if they do not exist
+  # Extend the class methods when the module is included
   #
-  def initialize
-    @data_file = "#{DATA_DIR}/#{self.class.name.downcase}.txt"
-
-    make_data_dir
-    make_data_file(@data_file)
+  def self.included(base)
+    base.extend(ClassMethods)
   end
 
   def write_data(contents)
-    File.open(@data_file, 'a') { |f| f << "#{contents}\n" }
-  end
-
-  def read_data
-    File.read(@data_file)
+    File.open(self.class.data_file, 'a') { |f| f << "#{contents}\n" }
   end
 
   def save
-    values = filtered_variables.map { |v| instance_variable_get(v) }
-    write_data(values.join(","))
+    values.empty? ? false : write_data(values.join(","))
   end
 
   private
-  #
-  # Check if the data directory exists
-  # if not create one
-  #
-  def make_data_dir
-    Dir.mkdir(DATA_DIR) unless File.directory?(DATA_DIR)
-  end
+
+  def values
+    instance_variables.map { |v| instance_variable_get(v) }
+  end 
 
   #
-  # Check if the data file exists
-  # if not create one named after the class that included the module
-  # 
-  def make_data_file(file)
-    File.new(file, 'w') unless File.file?(file)
-  end
-
+  # Class methods for setting up data files
   #
-  # Filter out the variables that shouldn't get saved to the data file
-  # 
-  def filtered_variables
-    instance_variables.select { |v| instance_variable_get(v) != @data_file }
+  module ClassMethods
+    def read_data
+      file = File.read(data_file)
+      file.split("\n").map { |line| line.split(",")}
+    end
+
+    def data_file
+      "#{DATA_DIR}/#{self.name.downcase}.txt"
+    end
+
+    def create_data_file
+      File.new(data_file, 'w') unless File.file?(data_file)
+    end
   end
 end

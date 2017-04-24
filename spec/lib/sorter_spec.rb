@@ -17,4 +17,8 @@ RSpec.describe "Sorter" do
     expect(result).to eq([['c','a','b'], ['a','b','c'], ['b','c','a']])
   end
 
+  it "should order descending by a column" do
+    result = @class.order_by_column(@data, 1, 'DESC')
+    expect(result).to eq([['b','c','a'], ['a','b','c'], ['c','a','b']])
+  end
 end

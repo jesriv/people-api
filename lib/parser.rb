@@ -1,5 +1,5 @@
 module Parser
   def split_input(fields)
-    fields.split(/,|\|/).map { |field| field.strip }
+    fields ? fields.split(/,|\|/).map { |field| field.strip } : false
   end
 end

@@ -7,9 +7,9 @@ RSpec.describe "Data Manager" do
   #
   class IncludeClass; include DataManager end
 
-  before(:context) do
+  before(:each) do
     @class = IncludeClass.new
-    @data_file = "db/#{@class.class.name.downcase}.txt"
+    @data_file = IncludeClass.data_file
   end
   
   context "included" do
@@ -44,9 +44,10 @@ RSpec.describe "Data Manager" do
     end
 
     it "should read data from a file" do
-      @class.write_data("some data")
-      contents = @class.read_data
-      expect(contents).to include("some data")
+      @class.write_data("a,b")
+      @class.write_data("c,d")
+      contents = IncludeClass.read_data
+      expect(contents).to eq([['a','b'],['c','d']])
     end
 
     it "should save attributes" do
@@ -55,6 +56,10 @@ RSpec.describe "Data Manager" do
       @class.save
       contents = File.read(@data_file)
       expect(contents).to eq("Ted,123 Maple Ave\n")
+    end
+
+    it "should not save an empty string" do
+      expect(@class.save).to eq(false)
     end
   end
 

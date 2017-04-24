@@ -5,6 +5,11 @@ RSpec.describe "Parser" do
   # Create a dummy class to emulate extending the module
   let(:extended_class) { Class.new { extend Parser } }
 
+  it "input should not be empty" do
+    result = extended_class.split_input(nil)
+    expect(result).to eq(false)
+  end
+
   it "should read a comma separated line" do
     result = extended_class.split_input("Smith, Joe, Blue, 1-15-1990")
     expect(result).to eq(["Smith", "Joe", "Blue", "1-15-1990"])
