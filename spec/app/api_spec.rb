@@ -28,6 +28,17 @@ RSpec.describe 'The people API', type: :request do
       expect(last_response.content_type).to eq("application/json")
       expect(last_response.body).to include('error')
     end
+
+    it "should be formatted correctly" do
+      post '/records', { record: "a, b" }
+      expect(last_response.body).to include('error')
+
+      post '/records', { record: "a, b, c, d, e" }
+      expect(last_response.body).to include('error')
+
+      post '/records', { record: "a, b, c, 1-1-2000" }
+      expect(last_response.body).to include('success')
+    end
   end
 
   context "GET /records/birthdate request" do
